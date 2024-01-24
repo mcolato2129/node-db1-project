@@ -1,9 +1,12 @@
+const db = require('../../data/db-config');
+
 const getAll = () => {
-  // DO YOUR MAGIC
+  // select * from accounts-- Basically what the return line is saying. only because becaus of knex and how ot is linked up to the data and being imported in here
+  return db('accounts');
 }
 
 const getById = id => {
-  // DO YOUR MAGIC
+  return db('accounts').where('id', id).first()
 }
 
 const create = account => {
