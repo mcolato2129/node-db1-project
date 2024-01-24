@@ -16,7 +16,11 @@ exports.checkAccountPayload = (req, res, next) => {
   }else if (typeof budget !== 'number' || !isNaN){ //Make sure to put !isNaN because this stands for isNotANumber and is actually a value of a number so I will not get the correct error messaging I want.
     error.message = "budget of account must be a number"
     next(error)
+  } else if (budget < 0 || budget > 1000000){
+    error.message = 'budget of account is to large or small'
+    next(error)
   }
+
 
 }
 
