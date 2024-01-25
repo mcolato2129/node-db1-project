@@ -10,7 +10,7 @@ exports.checkAccountPayload = (req, res, next) => {
   } else if (typeof name !== 'string') {
     error.message = 'name of account must be a string'
   } else if (name.trim().length < 3 || name.trim().length > 100) {
-    error.message = 'name of account must be between 3 to 100'
+    error.message = 'name of account must be between 3 and 100'
   } else if (typeof budget !== 'number' || !isNaN) { //Make sure to put !isNaN because this stands for isNotANumber and is actually a value of a number so I will not get the correct error messaging I want.
     error.message = "budget of account must be a number"
   } else if (budget < 0 || budget > 1000000) {

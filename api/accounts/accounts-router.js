@@ -35,7 +35,7 @@ md.checkAccountId, md.checkAccountPayload,
 async (req, res, next) => {
   try{
     const updatedAccount = await Account.updateById(req.params.id, req.body);//REMEBER req.body is its own thing and req.params is its own thing!!
-    res.status(201).json(updatedAccount)
+    res.status(200).json(updatedAccount)
   }catch(err){
     next(err)
   }
