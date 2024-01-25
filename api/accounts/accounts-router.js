@@ -32,9 +32,13 @@ async (req, res, next) => {
 router.put(
 '/:id', 
 md.checkAccountId, md.checkAccountPayload,
-(req, res, next) => {
-  // DO YOUR MAGIC
-  res.send('update account');
+async (req, res, next) => {
+  try{
+    const updatedAccount = await Account.updateById(req.params.id, req.body);//REMEBER req.body is its own thing and req.params is its own thing!!
+    res.status(201).json(updatedAccount)
+  }catch(err){
+    next(err)
+  }
 });
 
 router.delete('/:id', md.checkAccountId, 
