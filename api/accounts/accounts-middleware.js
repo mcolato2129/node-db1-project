@@ -14,7 +14,7 @@ exports.checkAccountPayload = (req, res, next) => {
   } else if (typeof budget !== 'number' || !isNaN) { //Make sure to put !isNaN because this stands for isNotANumber and is actually a value of a number so I will not get the correct error messaging I want.
     error.message = "budget of account must be a number"
   } else if (budget < 0 || budget > 1000000) {
-    error.message = 'budget of account is to large or small'
+    error.message = 'budget of account is too large or too small'
   }
 
   if (error.message) {
@@ -45,7 +45,7 @@ exports.checkAccountId = async (req, res, next) => {
   try {
     const account = await Account.getById(req.params.id);
     if (!account) {
-      next({ status: 404, message: 'not found' })
+      next({ status: 404, message: 'account not found' })
     } else {
       req.account = account;
       next()
