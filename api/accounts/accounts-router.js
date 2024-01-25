@@ -32,7 +32,6 @@ async (req, res, next) => {
 router.put(
 '/:id', 
 md.checkAccountId, md.checkAccountPayload,
-md.checkAccountNameUnique,
 (req, res, next) => {
   // DO YOUR MAGIC
   res.send('update account');
