@@ -1,44 +1,56 @@
 const Account = require('./accounts-model');
+const db = require('../../data/db-config');
 
 exports.checkAccountPayload = (req, res, next) => {
-  const error = {status: 400};
+  const error = { status: 400 };
   const { name, budget } = req.body;
 
-  if(name === undefined || budget === undefined){
+  if (name === undefined || budget === undefined) {
     error.message = 'name and budget are required'
-  }else if (typeof name !== 'string') {
+  } else if (typeof name !== 'string') {
     error.message = 'name of account must be a string'
-  } else if (name.trim().length < 3 || name.trim().length > 100){
+  } else if (name.trim().length < 3 || name.trim().length > 100) {
     error.message = 'name of account must be between 3 to 100'
-  }else if (typeof budget !== 'number' || !isNaN){ //Make sure to put !isNaN because this stands for isNotANumber and is actually a value of a number so I will not get the correct error messaging I want.
+  } else if (typeof budget !== 'number' || !isNaN) { //Make sure to put !isNaN because this stands for isNotANumber and is actually a value of a number so I will not get the correct error messaging I want.
     error.message = "budget of account must be a number"
-  } else if (budget < 0 || budget > 1000000){
+  } else if (budget < 0 || budget > 1000000) {
     error.message = 'budget of account is to large or small'
   }
 
-  if(error.message){
+  if (error.message) {
     next(error);//why next(err)?
-  }else {
+  } else {
     next()
   }
 
 }
 
-exports.checkAccountNameUnique = (req, res, next) => {
-  // DO YOUR MAGIC
-  next()
+exports.checkAccountNameUnique = async (req, res, next) => {
+  try {
+    const existing = await db('accounts')
+      .where('name', req.body.name.trim()).first()
+
+      if(existing){
+        next({status: 400, message: 'that name is taken'});
+      }else {
+        next();
+      }
+
+  } catch (err) {
+    next(err)
+  }
 }
 
 exports.checkAccountId = async (req, res, next) => {
-  try{
+  try {
     const account = await Account.getById(req.params.id);
-    if(!account){
-      next({status: 404, message: 'not found'})
-    } else{
+    if (!account) {
+      next({ status: 404, message: 'not found' })
+    } else {
       req.account = account;
       next()
     }
-  }catch(err){
-    next(err)    
+  } catch (err) {
+    next(err)
   }
 }
